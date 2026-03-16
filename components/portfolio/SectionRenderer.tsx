@@ -26,9 +26,6 @@ export default function SectionRenderer({ section, accent = 'text-indigo-600' }:
       const d = section.data as Partial<AboutData>
       return (
         <div className="space-y-4">
-          {d.photo_url && (
-            <img src={d.photo_url} alt="Profile" className="w-24 h-24 rounded-full object-cover border-4 border-white shadow" />
-          )}
           {d.bio && <p className="text-gray-600 leading-relaxed">{d.bio}</p>}
           <div className="flex flex-wrap gap-3 text-sm">
             {d.location && <span className="text-gray-500">📍 {d.location}</span>}
