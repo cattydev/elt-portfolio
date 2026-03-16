@@ -10,6 +10,9 @@ export type SectionType =
   | 'reflections'
   | 'academic_works'
   | 'skills'
+  | 'teaching_philosophy'
+  | 'assessment_evaluation'
+  | 'student_work_samples'
 
 export type Theme = 'minimal' | 'academic' | 'creative'
 
@@ -41,7 +44,6 @@ export interface PortfolioSection {
 // Section data types
 export interface AboutData {
   bio: string
-  photo_url?: string
   location?: string
   email?: string
   linkedin?: string
@@ -79,6 +81,7 @@ export interface LessonPlanItem {
   duration: string
   file_url?: string
   description?: string
+  student_work_url?: string
 }
 export interface LessonPlansData { items: LessonPlanItem[] }
 
@@ -149,6 +152,33 @@ export interface SkillsData {
   categories: SkillCategory[]
 }
 
+export interface TeachingPhilosophyData {
+  statement: string
+  principles: string[]
+  approach?: string
+  influences?: string
+}
+
+export interface AssessmentItem {
+  id: string
+  title: string
+  type: 'formative' | 'summative' | 'diagnostic' | 'portfolio' | 'rubric' | 'peer' | 'self' | 'other'
+  description?: string
+  file_url?: string
+}
+export interface AssessmentData { items: AssessmentItem[] }
+
+export interface StudentWorkItem {
+  id: string
+  title: string
+  level: string
+  activity_type: string
+  description?: string
+  file_url?: string
+  image_url?: string
+}
+export interface StudentWorkSamplesData { items: StudentWorkItem[] }
+
 export const SECTION_LABELS: Record<SectionType, string> = {
   about: 'About Me',
   education: 'Education',
@@ -161,6 +191,9 @@ export const SECTION_LABELS: Record<SectionType, string> = {
   reflections: 'Reflections',
   academic_works: 'Academic Works',
   skills: 'Skills & Methodologies',
+  teaching_philosophy: 'Teaching Philosophy',
+  assessment_evaluation: 'Assessment & Evaluation',
+  student_work_samples: 'Student Work Samples',
 }
 
 export const SECTION_ICONS: Record<SectionType, string> = {
@@ -175,6 +208,9 @@ export const SECTION_ICONS: Record<SectionType, string> = {
   reflections: '💭',
   academic_works: '🔬',
   skills: '⚡',
+  teaching_philosophy: '🌱',
+  assessment_evaluation: '📊',
+  student_work_samples: '🖼️',
 }
 
 export const THEME_LABELS: Record<Theme, string> = {

@@ -23,7 +23,7 @@ export function SaveButton({ onSave }: SaveButtonProps) {
     <button
       onClick={handle}
       disabled={loading}
-      className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+      className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-60 text-white text-sm font-medium px-5 py-2.5 rounded-xl transition-colors"
     >
       {loading
         ? <><Loader2 className="w-4 h-4 animate-spin" />Saving…</>
@@ -43,7 +43,7 @@ export function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <input
       {...props}
-      className={`w-full text-sm px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${props.className ?? ''}`}
+      className={`w-full text-sm px-3 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${props.className ?? ''}`}
     />
   )
 }
@@ -52,7 +52,7 @@ export function Textarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement
   return (
     <textarea
       {...props}
-      className={`w-full text-sm px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none ${props.className ?? ''}`}
+      className={`w-full text-sm px-3 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none ${props.className ?? ''}`}
     />
   )
 }
@@ -61,7 +61,7 @@ export function Select(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
   return (
     <select
       {...props}
-      className={`w-full text-sm px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white ${props.className ?? ''}`}
+      className={`w-full text-sm px-3 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white ${props.className ?? ''}`}
     />
   )
 }

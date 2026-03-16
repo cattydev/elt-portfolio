@@ -40,7 +40,7 @@ export default function LoginPage() {
           <p className="text-gray-500 mt-1">Sign in to edit your portfolio</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-8">
           <form onSubmit={handleLogin} className="space-y-5">
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">
@@ -81,7 +81,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white font-medium py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2"
+              className="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-60 text-white font-medium py-3 rounded-xl transition-colors flex items-center justify-center gap-2 text-base"
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               Sign In

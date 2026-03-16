@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import type { Profile } from '@/types'
-import { Loader2, Save, User } from 'lucide-react'
+import { Loader2, Save, User, Camera } from 'lucide-react'
 import FileUploader from '@/components/ui/FileUploader'
 
 interface Props {
@@ -20,6 +20,8 @@ export default function ProfileEditor({ profile, onUpdate }: Props) {
   })
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [editingCover, setEditingCover] = useState(false)
+  const [editingAvatar, setEditingAvatar] = useState(false)
 
   const handleSave = async () => {
     setSaving(true)
@@ -31,59 +33,84 @@ export default function ProfileEditor({ profile, onUpdate }: Props) {
 
   return (
     <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
-      {/* Cover photo */}
-      <div className="relative h-24 bg-gradient-to-br from-indigo-100 to-purple-100 group cursor-pointer">
-        {form.cover_url ? (
-          <img src={form.cover_url} alt="Cover" className="w-full h-full object-cover" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs select-none">
-            Click to add cover photo
+
+      {/* Cover photo section */}
+      <div className="relative">
+        <div className="h-28 bg-gradient-to-br from-indigo-100 to-purple-100 w-full">
+          {form.cover_url && (
+            <img src={form.cover_url} alt="Cover" className="w-full h-full object-cover" />
+          )}
+        </div>
+        <button
+          onClick={() => { setEditingCover(v => !v); setEditingAvatar(false) }}
+          className="absolute bottom-2 right-2 flex items-center gap-1.5 bg-black/50 hover:bg-black/70 text-white text-xs px-2.5 py-1.5 rounded-lg transition-colors backdrop-blur-sm"
+        >
+          <Camera className="w-3.5 h-3.5" />
+          {form.cover_url ? 'Change Cover' : 'Add Cover'}
+        </button>
+      </div>
+
+      {/* Cover uploader (conditional) */}
+      {editingCover && (
+        <div className="px-4 pt-3 pb-1 bg-indigo-50 border-b border-indigo-100">
+          <FileUploader
+            userId={profile.id}
+            folder="cover"
+            type="image"
+            currentUrl={form.cover_url}
+            onUpload={url => { setForm(f => ({ ...f, cover_url: url })); setEditingCover(false) }}
+            label="Upload Cover Photo"
+          />
+        </div>
+      )}
+
+      {/* Avatar section */}
+      <div className="px-4 pt-4 pb-2 flex items-center gap-4">
+        <div className="relative flex-shrink-0">
+          <div className="w-16 h-16 rounded-full border-4 border-white bg-indigo-100 overflow-hidden shadow">
+            {form.avatar_url ? (
+              <img src={form.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <User className="w-7 h-7 text-indigo-300" />
+              </div>
+            )}
           </div>
-        )}
-        {/* Overlay uploader */}
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all flex items-center justify-center">
-          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-            <FileUploader
-              userId={profile.id}
-              folder="cover"
-              type="image"
-              onUpload={url => setForm(f => ({ ...f, cover_url: url }))}
-              label="Upload Cover"
-              className="w-36"
-            />
-          </div>
+          <button
+            onClick={() => { setEditingAvatar(v => !v); setEditingCover(false) }}
+            className="absolute -bottom-1 -right-1 w-6 h-6 bg-indigo-600 hover:bg-indigo-700 rounded-full flex items-center justify-center shadow-sm transition-colors"
+          >
+            <Camera className="w-3 h-3 text-white" />
+          </button>
+        </div>
+        <div className="flex-1">
+          <p className="text-sm font-medium text-gray-800">{form.full_name || 'Your Name'}</p>
+          <p className="text-xs text-gray-400">{form.username ? `@${form.username}` : 'Set a username below'}</p>
         </div>
       </div>
 
-      {/* Avatar row */}
-      <div className="px-4 -mt-7 mb-3 flex items-end gap-3">
-        <div className="relative w-14 h-14 rounded-full border-4 border-white bg-indigo-100 overflow-hidden shadow flex-shrink-0">
-          {form.avatar_url ? (
-            <img src={form.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <User className="w-6 h-6 text-indigo-300" />
-            </div>
-          )}
-        </div>
-        <div className="flex-1 mb-0.5">
+      {/* Avatar uploader (conditional) */}
+      {editingAvatar && (
+        <div className="px-4 pb-2 bg-indigo-50 border-b border-indigo-100">
           <FileUploader
             userId={profile.id}
             folder="avatar"
             type="image"
-            onUpload={url => setForm(f => ({ ...f, avatar_url: url }))}
-            label="Upload Photo"
+            currentUrl={form.avatar_url}
+            onUpload={url => { setForm(f => ({ ...f, avatar_url: url })); setEditingAvatar(false) }}
+            label="Upload Profile Photo"
           />
         </div>
-      </div>
+      )}
 
-      <div className="px-4 pb-4 space-y-3">
+      {/* Form fields */}
+      <div className="px-4 pb-4 pt-3 space-y-3">
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1">Full Name</label>
           <input
             value={form.full_name}
             onChange={e => setForm(f => ({ ...f, full_name: e.target.value }))}
-            className="w-full text-sm px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full text-sm px-3 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             placeholder="Ada Yılmaz"
           />
         </div>
@@ -93,13 +120,13 @@ export default function ProfileEditor({ profile, onUpdate }: Props) {
             Username <span className="text-gray-400 font-normal">(public URL)</span>
           </label>
           <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-indigo-500">
-            <span className="px-2.5 py-2 bg-gray-50 text-gray-400 text-xs border-r border-gray-200 whitespace-nowrap">
+            <span className="px-2.5 py-2.5 bg-gray-50 text-gray-400 text-xs border-r border-gray-200 whitespace-nowrap">
               site.com/
             </span>
             <input
               value={form.username}
               onChange={e => setForm(f => ({ ...f, username: e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, '') }))}
-              className="flex-1 px-2.5 py-2 text-sm focus:outline-none"
+              className="flex-1 px-2.5 py-2.5 text-sm focus:outline-none"
               placeholder="adayilmaz"
             />
           </div>
@@ -111,7 +138,7 @@ export default function ProfileEditor({ profile, onUpdate }: Props) {
             value={form.bio}
             onChange={e => setForm(f => ({ ...f, bio: e.target.value }))}
             rows={3}
-            className="w-full text-sm px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+            className="w-full text-sm px-3 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
             placeholder="ELT student passionate about communicative language teaching…"
           />
         </div>
@@ -119,7 +146,7 @@ export default function ProfileEditor({ profile, onUpdate }: Props) {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white text-sm font-medium py-2 rounded-lg transition-colors"
+          className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-60 text-white text-sm font-medium py-3 rounded-xl transition-colors"
         >
           {saving
             ? <><Loader2 className="w-4 h-4 animate-spin" />Saving…</>

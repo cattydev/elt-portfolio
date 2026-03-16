@@ -3,7 +3,8 @@ import { getEmbedUrl } from '@/lib/utils'
 import type {
   AboutData, EducationData, ExperienceData, LessonPlansData,
   MaterialsData, VideosData, LanguageProficiencyData, CertificatesData,
-  ReflectionsData, AcademicWorksData, SkillsData
+  ReflectionsData, AcademicWorksData, SkillsData,
+  TeachingPhilosophyData, AssessmentData, StudentWorkSamplesData
 } from '@/types'
 import { ExternalLink, FileText, Video, Globe, Mail, Linkedin } from 'lucide-react'
 
@@ -293,6 +294,107 @@ export default function SectionRenderer({ section, accent = 'text-indigo-600' }:
                   <span key={s} className="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-full">{s}</span>
                 ))}
               </div>
+            </div>
+          ))}
+        </div>
+      )
+    }
+
+    case 'teaching_philosophy': {
+      const d = section.data as Partial<TeachingPhilosophyData>
+      return (
+        <div className="space-y-5">
+          {d.statement && (
+            <p className="text-gray-700 leading-relaxed text-base italic border-l-4 border-indigo-300 pl-4">
+              "{d.statement}"
+            </p>
+          )}
+          {(d.principles ?? []).length > 0 && (
+            <div>
+              <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Core Principles</div>
+              <div className="space-y-2">
+                {d.principles!.map((p, i) => (
+                  <div key={i} className="flex items-start gap-2">
+                    <span className={`text-sm font-bold flex-shrink-0 ${accent}`}>✦</span>
+                    <p className="text-sm text-gray-700">{p}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {d.approach && (
+            <div>
+              <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Approach</div>
+              <p className="text-sm text-gray-600 leading-relaxed">{d.approach}</p>
+            </div>
+          )}
+          {d.influences && (
+            <div>
+              <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Influences</div>
+              <p className="text-sm text-gray-500">{d.influences}</p>
+            </div>
+          )}
+        </div>
+      )
+    }
+
+    case 'assessment_evaluation': {
+      const d = section.data as Partial<AssessmentData>
+      const typeColors: Record<string, string> = {
+        formative: 'bg-blue-100 text-blue-700',
+        summative: 'bg-purple-100 text-purple-700',
+        diagnostic: 'bg-yellow-100 text-yellow-700',
+        portfolio: 'bg-green-100 text-green-700',
+        rubric: 'bg-orange-100 text-orange-700',
+        peer: 'bg-pink-100 text-pink-700',
+        self: 'bg-teal-100 text-teal-700',
+        other: 'bg-gray-100 text-gray-600',
+      }
+      return (
+        <div className="grid gap-3 sm:grid-cols-2">
+          {(d.items ?? []).map(item => (
+            <div key={item.id} className="border border-gray-100 rounded-xl p-4 bg-gray-50">
+              <div className="flex items-start justify-between gap-2 mb-1">
+                <div className="font-medium text-gray-800 text-sm">{item.title}</div>
+                <span className={`text-xs px-2 py-0.5 rounded-full capitalize flex-shrink-0 ${typeColors[item.type] ?? typeColors.other}`}>
+                  {item.type.replace('_', ' ')}
+                </span>
+              </div>
+              {item.description && <p className="text-xs text-gray-500 mt-1">{item.description}</p>}
+              {item.file_url && (
+                <a href={item.file_url} target="_blank" rel="noopener"
+                  className={`mt-2 inline-flex items-center gap-1 text-xs ${accent} hover:underline`}>
+                  <FileText className="w-3 h-3" />View File
+                </a>
+              )}
+            </div>
+          ))}
+        </div>
+      )
+    }
+
+    case 'student_work_samples': {
+      const d = section.data as Partial<StudentWorkSamplesData>
+      return (
+        <div className="grid gap-3 sm:grid-cols-2">
+          {(d.items ?? []).map(item => (
+            <div key={item.id} className="border border-gray-100 rounded-xl p-4 bg-gray-50">
+              <div className="flex items-start justify-between gap-2">
+                <div className="font-medium text-gray-800 text-sm">{item.title}</div>
+                {item.level && (
+                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full flex-shrink-0">{item.level}</span>
+                )}
+              </div>
+              {item.activity_type && (
+                <div className="text-xs text-gray-500 mt-0.5">🎯 {item.activity_type}</div>
+              )}
+              {item.description && <p className="text-xs text-gray-500 mt-1">{item.description}</p>}
+              {item.file_url && (
+                <a href={item.file_url} target="_blank" rel="noopener"
+                  className={`mt-2 inline-flex items-center gap-1 text-xs ${accent} hover:underline`}>
+                  <FileText className="w-3 h-3" />View Sample
+                </a>
+              )}
             </div>
           ))}
         </div>

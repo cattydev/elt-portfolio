@@ -14,6 +14,9 @@ import CertificatesEditor from '../sections/editors/CertificatesEditor'
 import ReflectionsEditor from '../sections/editors/ReflectionsEditor'
 import AcademicWorksEditor from '../sections/editors/AcademicWorksEditor'
 import SkillsEditor from '../sections/editors/SkillsEditor'
+import TeachingPhilosophyEditor from '../sections/editors/TeachingPhilosophyEditor'
+import AssessmentEditor from '../sections/editors/AssessmentEditor'
+import StudentWorkSamplesEditor from '../sections/editors/StudentWorkSamplesEditor'
 
 interface Props {
   section: PortfolioSection
@@ -38,22 +41,25 @@ export default function SectionEditor({ section, userId, onUpdate, onClose }: Pr
       case 'reflections': return <ReflectionsEditor data={section.data} onSave={save} />
       case 'academic_works': return <AcademicWorksEditor data={section.data} onSave={save} userId={userId} />
       case 'skills': return <SkillsEditor data={section.data} onSave={save} />
+      case 'teaching_philosophy': return <TeachingPhilosophyEditor data={section.data} onSave={save} />
+      case 'assessment_evaluation': return <AssessmentEditor data={section.data} onSave={save} userId={userId} />
+      case 'student_work_samples': return <StudentWorkSamplesEditor data={section.data} onSave={save} userId={userId} />
       default: return <p className="text-gray-400 text-sm">Editor coming soon.</p>
     }
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
-      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+    <div className="bg-white rounded-xl border border-gray-100 overflow-hidden h-full flex flex-col">
+      <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-100 flex-shrink-0">
         <div className="flex items-center gap-2">
           <span className="text-xl">{SECTION_ICONS[section.type]}</span>
           <h2 className="font-semibold text-gray-800">{section.title}</h2>
         </div>
-        <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
+        <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors p-1">
           <X className="w-5 h-5" />
         </button>
       </div>
-      <div className="p-6 overflow-y-auto max-h-[calc(100vh-12rem)]">
+      <div className="p-4 sm:p-6 overflow-y-auto flex-1">
         {renderEditor()}
       </div>
     </div>
